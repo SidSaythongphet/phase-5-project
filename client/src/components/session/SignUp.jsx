@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const SignUp = ({ setFamily }) => {
   const [formData, setFormData] = useState({
     last_name: "",
     email: "",
     password: "",
     password_confirmation: ""
   })
+  let navigate = useNavigate()
 
   const handleChange = (e) => {
     setFormData({
@@ -18,8 +20,23 @@ const SignUp = () => {
     })
   }
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = async (e) =>{
     e.preventDefault()
+
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData)
+    })
+    const data = await response.json()
+    if (response.ok) {
+      setFamily(data)
+      navigate('/')
+    } else {
+      console.log("error")
+    }
   }
 
   return (
@@ -33,7 +50,6 @@ const SignUp = () => {
       <div>
         <TextField
           required
-          id="outlined-required"
           label="Family Name"
           name="last_name"
           value={ formData.last_name }
@@ -41,14 +57,12 @@ const SignUp = () => {
         />
         <TextField
           required
-          id="outlined-required"
           label="Email Address"
           name="email"
           value={ formData.email }
           onChange={ handleChange }
         />
         <TextField
-          id="outlined-password-input"
           label="Password"
           type="password"
           name="password"
@@ -56,7 +70,6 @@ const SignUp = () => {
           onChange={ handleChange }
         />
         <TextField
-          id="outlined-password-input"
           label="Confirm Password"
           type="password"
           name="password_confirmation"

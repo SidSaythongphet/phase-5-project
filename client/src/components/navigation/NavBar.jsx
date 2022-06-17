@@ -4,30 +4,38 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 
-const NavBar = () => {
+const NavBar = ({ family, setFamily }) => {
   let navigate = useNavigate()
+
+  const login = () => {
+    return (
+      <>
+        <Button color="inherit" onClick={ () => navigate("/signup") } >Sign Up</Button>
+        <Button color="inherit" onClick={ () => navigate("/login") } >Login</Button>
+      </>
+    )
+  }
+
+  const logout = async () => {
+    const response = await fetch('/api/logout', {
+      method: 'DELETE'
+    })
+    if (response.ok) {
+      setFamily(null)
+      navigate("/login")
+    }
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            { family === null ? "Please Log In" : family.last_name }
           </Typography>
-          <Button color="inherit" onClick={ () => navigate("/signup") } >Sign Up</Button>
-          <Button color="inherit" onClick={ () => navigate("/login") } >Login</Button>
+          { family === null ? login() : <Button color="inherit" onClick={ logout } >Logout</Button> }
         </Toolbar>
       </AppBar>
     </Box>
