@@ -1,8 +1,12 @@
 import React from 'react'
+import FamilyDisplay from '../family/FamilyDisplay'
 
-const Home = () => {
+const Home = ({ family, onAddMember }) => {
   return (
-    <div>Home</div>
+    <div>
+      Home
+      <FamilyDisplay family={ family } onAddMember={ onAddMember } />
+    </div>
   )
 }
 
