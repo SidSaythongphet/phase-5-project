@@ -8,6 +8,7 @@ import Home from "./components/static/Home";
 
 const App = () => {
   const [family, setFamily] = useState(null)
+  const [user, setUser] = useState(null)
   const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
@@ -20,6 +21,15 @@ const App = () => {
           });
         }
       });
+      // fetch("/api/family")
+      // .then((r) => {
+      //   if (r.ok) {
+      //     r.json().then((family) => {
+      //       setFamily(family)
+      //       setLoggedIn(true)
+      //     });
+      //   }
+      // });
   }, []);
 
   const handleAddMember = (newMember) => {
@@ -29,12 +39,12 @@ const App = () => {
   console.log(family)
   return (
     <Router>
-      <NavBar family={ family } setFamily={ setFamily } />
-      { loggedIn ? <FamilyDisplay family={ family } onAddMember={ handleAddMember }/> : null }
+      <NavBar family={ family } user={ user } setFamily={ setFamily } setUser={ setUser } />
+      { user === null ? null : <FamilyDisplay family={ family } onAddMember={ handleAddMember }/> }
       <Routes>
         <Route path="/" element={ <Home family={ family } onAddMember={ handleAddMember } /> } />
         <Route path="signup" element={ <SignUp setFamily={ setFamily } /> } />
-        <Route path="login" element={ <Login setFamily={ setFamily } /> } />
+        <Route path="login" element={ <Login setFamily={ setFamily } setUser={ setUser }/> } />
       </Routes>
     </Router>
   );

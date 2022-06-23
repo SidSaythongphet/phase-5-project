@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
-const NavBar = ({ family, setFamily }) => {
+const NavBar = ({ family, user, setFamily, setUser }) => {
   let navigate = useNavigate()
 
   const login = () => {
@@ -24,6 +24,7 @@ const NavBar = ({ family, setFamily }) => {
     })
     if (response.ok) {
       setFamily(null)
+      setUser(null)
       navigate("/login")
     }
   }
@@ -33,7 +34,10 @@ const NavBar = ({ family, setFamily }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            { family === null ? "Please Log In" : family.last_name }
+            { family === null ? "Please Log In" : `The ${family.last_name} Family` }
+          </Typography>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            { user === null ? null : `Hello, ${user.first_name}!` }
           </Typography>
           { family === null ? login() : <Button color="inherit" onClick={ logout } >Logout</Button> }
         </Toolbar>

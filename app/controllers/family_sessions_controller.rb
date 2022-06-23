@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController
+class FamilySessionsController < ApplicationController
     skip_before_action :authorize, only: [:create]
 
     def create
@@ -13,6 +13,7 @@ class SessionsController < ApplicationController
 
     def destroy
         session.delete :family_id
+        session.delete :user_id
         head :no_content
     end
 
